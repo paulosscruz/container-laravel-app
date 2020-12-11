@@ -1,0 +1,60 @@
+version: '3.9'
+services:
+        application:
+                container_name: gm-application
+                build: ./.docker/application
+                entrypoint: dockerize -template ./.docker/application/.env:.env -wait tcp://gm-database:5432 -timeout 40s ./.docker/application/entrypoint-application.sh
+                environment: 
+                        - APPLICATION_NAME=GM
+                        - APPLICATION_DEBUG=true  
+                        - TZ=America/Sao_Paulo
+                        - COMPOSER_MEMORY_LIMIT=-1
+                        - DB_HOST=gm-database
+                        - DB_DATABASE=gestao-materiais
+                        - DB_USERNAME=postgres
+                        - DB_PASSWORD=postgres  
+                volumes:
+                        - .:/var/www
+                networks:
+                        - gm-network 
+                depends_on:
+                        - database
+        
+        database:
+                container_name: gm-database
+                build: ./.docker/postgresql
+                tty: true
+                environment:
+                        - TZ=America/Sao_Paulo 
+                        - POSTGRES_USER=postgres
+                        - POSTGRES_PASSWORD=postgres
+                        - POSTGRES_DB=gestao-materiais
+                        - POSTGRES_HOST=gm-database
+                volumes:
+                        - ./.docker/dbdata:/var/lib/postgresql/data
+                networks:
+                        - gm-network
+                ports:
+                        - 5432:5432
+
+        nginx:
+                container_name: gm-nginx
+                build: .docker/nginx
+                entrypoint: dockerize -template ./.docker/nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf nginx -g "daemon off";
+                environment: 
+                        - NGINX_HOST=gestao-materiais-application
+                        - NGINX_PORT=9000
+                        - NGINX_HOST=gm-nginx
+                tty: true
+                ports:
+                        - 8080:80
+                volumes:
+                        - .:/var/www
+                networks:
+                        - gm-network
+                depends_on:
+                        - application
+
+networks:
+        gm-network:
+                driver: bridge
