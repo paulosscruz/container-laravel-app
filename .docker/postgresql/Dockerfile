@@ -1,0 +1,34 @@
+FROM postgres:12.5-alpine
+
+ARG DB_USERNAME
+ARG DB_PASSWORD
+ARG DB_PORT
+ARG DB_DATABASE
+
+ENV POSTGRES_USER ${DB_USERNAME} 
+ENV POSTGRES_PASSWORD ${DB_PASSWORD}
+ENV POSTGRES_PORT ${DB_PORT}
+ENV POSTGRES_DB ${DB_DATABASE}
+
+RUN echo ${DB_USERNAME}
+
+RUN apk update
+RUN apk add tzdata
+RUN cp /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
+RUN rm -r /usr/share/zoneinfo/Africa && \
+    rm -r /usr/share/zoneinfo/Antarctica && \
+    rm -r /usr/share/zoneinfo/Arctic && \
+    rm -r /usr/share/zoneinfo/Asia && \
+    rm -r /usr/share/zoneinfo/Atlantic && \
+    rm -r /usr/share/zoneinfo/Australia && \
+    rm -r /usr/share/zoneinfo/Europe  && \
+    rm -r /usr/share/zoneinfo/Indian && \
+    rm -r /usr/share/zoneinfo/Mexico && \
+    rm -r /usr/share/zoneinfo/Pacific && \
+    rm -r /usr/share/zoneinfo/Chile && \
+    rm -r /usr/share/zoneinfo/Canada
+RUN echo "America/Sao_Paulo" >  /etc/timezone
+
+ENV LANG pt_BR.UTF-8  
+ENV LANGUAGE pt_BR  
+ENV LC_ALL pt_BR.UTF-8

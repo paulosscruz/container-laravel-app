@@ -1,0 +1,46 @@
+version: '3.9'
+services:
+        laravel-application:
+                container_name: laravel-application
+                build: ./.docker/application
+                entrypoint: dockerize -template ./.docker/application/.env:.env -wait tcp://laravel-database:5432 -timeout 40s ./.docker/application/entrypoint-application.sh
+                volumes:
+                        - .:/var/www
+                networks:
+                        - laralve-network 
+                depends_on:
+                        - laravel-database
+        
+        laravel-database:
+                container_name: laravel-database
+                build: ./.docker/postgresql
+                tty: true
+                environment:
+                        - POSTGRES_USER=${DB_USERNAME}
+                        - POSTGRES_PASSWORD=${DB_PASSWORD}
+                        - POSTGRES_DB=${DB_DATABASE}
+                        - POSTGRES_PORT=${DB_PORT}
+                volumes:
+                        - ./.docker/dbdata:/var/lib/postgresql/data
+                networks:
+                        - laravel-network
+                ports:
+                        - 5432:5432
+
+        laravel-nginx:
+                container_name: laravel-nginx
+                build: .docker/nginx
+                entrypoint: dockerize -template ./.docker/nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf nginx -g "daemon off";
+                tty: true
+                ports:
+                        - 8080:80
+                volumes:
+                        - .:/var/www
+                networks:
+                        - laravel-network
+                depends_on:
+                        - laravel-application
+
+networks:
+        laravel-network:
+                driver: bridge
