@@ -7,24 +7,25 @@ then
 	rm -rf /var/www/.git
 	rm -f /var/www/README*
 
-	git init
-
 	if [ -z $APPLICATION_REPOSITORY]
 	then
 		composer create-project laravel/laravel temp-project
-		rm /var/www/temp-project/.env
-		rm /var/www/temp-project/docker-compose.yml
-		mv /var/www/temp-project/* .
-		rm -rf /var/www/temp-project
-		php artisan key:generate
+		git init --separate-git-dir /var/www/temp-project
 	else
-		git remote add origin $APPLICATION_REPOSITORY
-		git fetch
-		git checkout -f master $APPLICATION_REPOSITORY
-		composer install
+		git clone $APPLICATION_REPOSITORY temp-project
+		composer -d /var/www/temp-project install	
 	fi
+	
+	rm -f /var/www/temp-project/.env
+        rm -f /var/www/temp-project/docker-compose.yml
+	rm -f /var/www/temp-project/docker.env
+	rm -rf /var/www/temp-project/.docker
+	
+	mv /var/www/temp-project/* .
+	rm -rf /var/www/temp-project
+	php artisan key:generate
+
 else
-	composer install
 	php artisan key:generate
 fi
 
