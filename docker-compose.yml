@@ -1,9 +1,11 @@
 version: '3.9'
 services:
+<<<<<<< HEAD
         laravel-application:
                 container_name: laravel-application
                 build: ./.docker/application
                 entrypoint: dockerize -template ./.docker/application/.env:.env -wait tcp://laravel-database:5432 -timeout 40s ./.docker/application/entrypoint-application.sh
+                env_file: ./docker.env
                 volumes:
                         - .:/var/www
                 networks:
@@ -20,6 +22,7 @@ services:
                         - POSTGRES_PASSWORD=${DB_PASSWORD}
                         - POSTGRES_DB=${DB_DATABASE}
                         - POSTGRES_PORT=${DB_PORT}
+                env_file: ./docker.env
                 volumes:
                         - ./.docker/dbdata:/var/lib/postgresql/data
                 networks:
@@ -34,6 +37,7 @@ services:
                 tty: true
                 ports:
                         - 8080:80
+                env_file: ./docker.env
                 volumes:
                         - .:/var/www
                 networks:

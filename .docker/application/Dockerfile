@@ -39,7 +39,5 @@ RUN rm -rf /var/www/html \
 
 ENV PATH="/root/.composer/vendor/bin:${PATH}"
 
-RUN composer global require laravel/installer
-
 EXPOSE 9000
 ENTRYPOINT ["php-fpm"]

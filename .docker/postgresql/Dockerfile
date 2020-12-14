@@ -1,17 +1,5 @@
 FROM postgres:12.5-alpine
 
-ARG DB_USERNAME
-ARG DB_PASSWORD
-ARG DB_PORT
-ARG DB_DATABASE
-
-ENV POSTGRES_USER ${DB_USERNAME} 
-ENV POSTGRES_PASSWORD ${DB_PASSWORD}
-ENV POSTGRES_PORT ${DB_PORT}
-ENV POSTGRES_DB ${DB_DATABASE}
-
-RUN echo ${DB_USERNAME}
-
 RUN apk update
 RUN apk add tzdata
 RUN cp /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
