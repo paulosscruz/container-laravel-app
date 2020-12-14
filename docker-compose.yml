@@ -1,6 +1,5 @@
 version: '3.9'
 services:
-<<<<<<< HEAD
         laravel-application:
                 container_name: laravel-application
                 build: ./.docker/application
