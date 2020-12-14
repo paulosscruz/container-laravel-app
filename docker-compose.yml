@@ -39,7 +39,7 @@ services:
                 ports:
                         - 8080:80
                 env_file: 
-                        ./docker.env
+                        - docker.env
                 volumes:
                         - .:/var/www
                 networks:
