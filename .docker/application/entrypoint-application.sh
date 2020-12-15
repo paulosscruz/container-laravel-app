@@ -10,7 +10,9 @@ then
 	if [ -z $APPLICATION_REPOSITORY]
 	then
 		composer create-project laravel/laravel temp-project
-		git init --separate-git-dir /var/www/temp-project
+		cd /var/www/temp-project
+		git init
+		cd ..
 	else
 		git clone $APPLICATION_REPOSITORY temp-project
 		composer -d /var/www/temp-project install	
