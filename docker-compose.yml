@@ -6,6 +6,8 @@ services:
                         context: ./
                         dockerfile: ./.docker/application/Dockerfile
                 entrypoint: dockerize -template ./.docker/application/.env:.env -wait tcp://laravel-database:5432 -timeout 40s ./.docker/application/entrypoint-application.sh
+                env_file: 
+                        - docker.env
                 volumes:
                         - .:/var/www
                 networks:
@@ -24,7 +26,7 @@ services:
                 networks:
                         - laravel-network
                 ports:
-                        - 5432:${DB_PORT}
+                        - 5432:5432
                 environment:
                         - POSTGRES_USER=${DB_USERNAME}
                         - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -35,6 +37,8 @@ services:
                 build: .docker/nginx
                 entrypoint: dockerize -template ./.docker/nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf nginx -g "daemon off";
                 tty: true
+                env_file:
+                        - docker.env
                 ports:
                         - 8080:80
                 volumes:
