@@ -10,7 +10,7 @@ then
 	composer create-project laravel/laravel temp-project
 	cd /var/www/temp-project
 	git init
-	cd.. 
+	cd .. 
 
 	rm -f /var/www/temp-project/.env
         rm -f /var/www/temp-project/docker-compose.yml
