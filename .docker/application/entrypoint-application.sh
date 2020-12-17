@@ -24,9 +24,8 @@ then
 else
 	composer install
 	php artisan key:generate
-	chmod 777 -R /var/www/*
 fi
 
 ln -s /var/www/public /var/www/html
-
+chmod 777 -R /var/www/*
 php-fpm
