@@ -1,11 +1,11 @@
 version: '3'
 services:
         laravel-application:
-                container_name: laravel-application
+                container_name: ${APPLICATION_NAME}-application
                 build: 
                         context: ./
                         dockerfile: ./.docker/application/Dockerfile
-                entrypoint: dockerize -template ./.docker/application/.env:.env -wait tcp://laravel-database:5432 -timeout 40s ./.docker/application/entrypoint-application.sh
+                entrypoint: dockerize -template ./.docker/application/.env:.env -wait tcp://laravel-database:5432 -timeout 40s /bin/bash ./.docker/application/entrypoint-application.sh && dos2unix ./.docker/application/entrypoint-application.sh
                 env_file: 
                         - docker.env
                 volumes:
@@ -16,7 +16,7 @@ services:
                         - laravel-database
         
         laravel-database:
-                container_name: laravel-database
+                container_name: ${APPLICATION_NAME}-database
                 build: 
                         context: ./
                         dockerfile: ./.docker/postgresql/Dockerfile
@@ -33,7 +33,7 @@ services:
                         - POSTGRES_DB=${DB_DATABASE}
                         - POSTGRES_PORT=${DB_PORT}  
         laravel-nginx:
-                container_name: laravel-nginx
+                container_name: ${APPLICATION_NAME}-nginx
                 build: .docker/nginx
                 entrypoint: dockerize -template ./.docker/nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf nginx -g "daemon off";
                 tty: true

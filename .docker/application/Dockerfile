@@ -13,6 +13,8 @@ RUN apk add --no-cache \
   zlib-dev \
   icu-dev \
   git \
+  dos2unix \
+  libxml2-dev \
   $PHPIZE_DEPS
 
 RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
@@ -20,12 +22,14 @@ RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
 RUN docker-php-ext-install pdo_pgsql \
     pgsql \
     zip \
-    intl
+    intl \
+    soap
 
 RUN docker-php-ext-enable pdo_pgsql \
     pgsql \
     zip \
-    intl
+    intl \
+    soap
 
 RUN docker-php-ext-install sockets
 
