@@ -5,7 +5,7 @@ services:
                 build: 
                         context: ./
                         dockerfile: ./.docker/application/Dockerfile
-                entrypoint: dockerize -template ./.docker/application/.env:.env -wait tcp://laravel-database:5432 -timeout 40s /bin/bash ./.docker/application/entrypoint-application.sh && dos2unix ./.docker/application/entrypoint-application.sh
+                entrypoint: dockerize -template ./.docker/application/.env:.env -wait tcp://laravel-database:5432 -timeout 40s dos2unix ./.docker/application/entrypoint-application.sh && /bin/bash ./.docker/application/entrypoint-application.sh
                 env_file: 
                         - docker.env
                 volumes:
